@@ -5,19 +5,19 @@ const jsdom = require("jsdom")
 
 const GENERATED_COMMENT = "// This file is generated. Please don't modify it directly."
 
-async function main() {
+function main() {
   const doc = asciidoctor.loadFile('aim42/src/main/asciidoc/index.adoc', { safe: "safe" })
-  processStructuralNode(doc, "src", true)
+  processStructuralNode(doc, "src")
 }
 
-async function processStructuralNode(section, path, isDocument = false) {
+function processStructuralNode(node, path) {
   console.log("Processing structural node: " + path)
   if (!fs.existsSync(path)) { fs.mkdirSync(path) }
 
-  generateDescriptionFile(section, path, isDocument)
-  generateContentFile(section, path, isDocument)
+  generateDescriptionFile(node, path)
+  generateContentFile(node, path)
 
-  section.getSections().forEach(child => processStructuralNode(child, path + "/" + getSlug(child)))
+  node.getSections().forEach(child => processStructuralNode(child, path + "/" + getSlug(child)))
 }
 
 function getSlug(section) {
@@ -29,19 +29,11 @@ function getPlainText(html) {
   return dom.window.document.querySelector("body").textContent.trim();
 }
 
-function generateDescriptionFile(node, path, isDocument = false) {
+function generateDescriptionFile(node, path) {
 
-  const description = {
-    title: node.getTitle(),
-    titlePlain: getPlainText(node.getTitle())
-  }
+  const description = generateDescription(node)
 
-  if (!isDocument) {
-    description.slug = getSlug(node)
-    description.id = node.getId()
-    description.sectionType = node.getSectionName()
-  }
-
+  const isDocument = description.type === "document"
   const type = isDocument ? "Document" : "Section"
   const variable = isDocument ? "aim42" : camelCase(description.slug)
 
@@ -55,7 +47,55 @@ function generateDescriptionFile(node, path, isDocument = false) {
   fs.writeFileSync(path + '/index.ts', sectionFile, { flag: 'w' })
 }
 
-function generateContentFile(node, path, isDocument = false) {
+function generateDescription(node) {
+
+  const type = node.getNodeName();
+
+  switch (type) {
+    case "document":
+      return { type, ...generateStructuralNodeDescription(node) }
+    case "section":
+      return {
+        type,
+        slug: getSlug(node),
+        id: node.getId(),
+        sectionType: node.getSectionName(),
+        index: node.getIndex(),
+        caption: node.getCaption(),
+        ...generateStructuralNodeDescription(node)
+      }
+      // case "image":
+      //   return {
+      //     type,
+      //     id: node.getId(),
+      //     ...generateTitledNodeDescription(node),          
+      //     alt: node.getAttribute("alt"),
+      //     src: node.getAttribute("target")
+      //   }
+      default:
+        // Note: if we want to divide other types further, "dlist" returns a weird data structure from getBlocks
+        return { type, content: node.convert() }
+  }
+}
+
+function generateTitledNodeDescription(node) {
+  return {
+    title: node.getTitle(),
+    titlePlain: getPlainText(node.getTitle()),
+    caption: node.getCaption(),
+    numeral: typeof node.getNumeral() === "object" ? undefined : node.getNumeral()
+  }
+}
+
+function generateStructuralNodeDescription(node) {
+  return {
+    ...generateTitledNodeDescription(node),
+    children: node.getBlocks().map(b => generateDescription(b))
+  }
+}
+
+function generateContentFile(node, path) {
+  const isDocument = node.getNodeName() === "document"
   const variable = (isDocument ? "aim42" : camelCase(getSlug(node))) + "Content"
   const content = `
     export const ${variable}: string = ${JSON.stringify(node.getContent())}
