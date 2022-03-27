@@ -1,9 +1,12 @@
 {
   "name": "@scope42/structured-aim42",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A structured version of the aim42 method reference",
   "main": "lib/index.js",
-  "files": [ "lib/**", "resources/**" ],
+  "files": [
+    "lib/**",
+    "resources/**"
+  ],
   "scripts": {
     "clone": "git clone https://github.com/aim42/aim42.git",
     "build": "npm-run-all clean generate format compile copy-resources",
