@@ -21,3 +21,4 @@ lib/
 # Only for initial dev. From the first release on, we'll commit generated sources
 src/
 !src/types.ts
+resources

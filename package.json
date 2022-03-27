@@ -3,17 +3,15 @@
   "version": "0.0.0",
   "description": "A structured version of the aim42 method reference",
   "main": "lib/index.js",
-  "files": [
-    "lib/**"
-  ],
+  "files": [ "lib/**", "resources/**" ],
   "scripts": {
     "clone": "git clone https://github.com/aim42/aim42.git",
     "build": "npm-run-all clean generate format compile copy-resources",
-    "clean": "rimraf src/**/[!types.ts]* && rimraf lib/**",
+    "clean": "rimraf \"src/**/[!types.ts]*\" && rimraf lib && rimraf resources",
     "generate": "node generate.js",
     "compile": "tsc",
     "format": "prettier --write \"src/**/*\"",
-    "copy-resources": "copyfiles -u 4 \"aim42/src/main/resources/@(images|css)/**\" src/_resources && copyfiles -u 1 src/_resources/** lib"
+    "copy-resources": "copyfiles -u 4 \"aim42/src/main/resources/@(images|css)/**\" resources"
   },
   "repository": {
     "type": "git",
