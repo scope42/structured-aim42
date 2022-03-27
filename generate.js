@@ -24,6 +24,11 @@ function getSlug(section) {
   return section.getId().toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/^-/, "")
 }
 
+function getRelativePathToRoot(path) {
+  const distance = path.split("/").length - 1
+  return distance === 0 ? "./" : "../".repeat(distance)
+}
+
 function getPlainText(html) {
   const dom = new jsdom.JSDOM("<!DOCTYPE html><body>" + html + "</body>")
   return dom.window.document.querySelector("body").textContent.trim();
@@ -40,7 +45,7 @@ function generateDescriptionFile(node, path) {
   const sectionFile = `
     ${GENERATED_COMMENT}
 
-    import { ${type} } from 'types'
+    import { ${type} } from '${getRelativePathToRoot(path)}types'
 
     export const ${variable}: ${type} = ${JSON.stringify(description)}
   `
@@ -104,7 +109,7 @@ function generateAtomicContentFile(node, path) {
   const content = `
     ${GENERATED_COMMENT}
 
-    import { Atomic, ${type} } from 'types'
+    import { Atomic, ${type} } from '${getRelativePathToRoot(path)}types'
 
     export const ${variable}: Atomic<${type}> = ${JSON.stringify(generateDescription(node, true))}
   `
