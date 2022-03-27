@@ -4,6 +4,13 @@ const camelCase = require('camelcase')
 const jsdom = require("jsdom")
 
 const GENERATED_COMMENT = "// This file is generated. Please don't modify it directly."
+const ATTRIBUTION_COMMENT = `/**
+ * This is content from the [aim42 Method Reference](https://aim42.github.io/)
+ * by [Gernot Starke](https://www.gernotstarke.de/) and [community
+ * contributors](https://github.com/aim42/aim42/graphs/contributors), used under
+ * [CC BY-SA](https://creativecommons.org/licenses/by-sa/4.0/). If you distribute
+ * it, make sure to attribute the original authors.
+ */`
 
 function main() {
   const doc = asciidoctor.loadFile('aim42/src/main/asciidoc/index.adoc', { safe: "safe" })
@@ -47,6 +54,7 @@ function generateDescriptionFile(node, path) {
 
     import { ${type} } from '${getRelativePathToRoot(path)}types'
 
+    ${ATTRIBUTION_COMMENT}
     export const ${variable}: ${type} = ${JSON.stringify(description)}
   `
   fs.writeFileSync(path + '/index.ts', sectionFile, { flag: 'w' })
@@ -111,6 +119,7 @@ function generateAtomicContentFile(node, path) {
 
     import { Atomic, ${type} } from '${getRelativePathToRoot(path)}types'
 
+    ${ATTRIBUTION_COMMENT}
     export const ${variable}: Atomic<${type}> = ${JSON.stringify(generateDescription(node, true))}
   `
   fs.writeFileSync(path + "/atomic.ts", content, { flag: 'w' })
