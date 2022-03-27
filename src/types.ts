@@ -86,7 +86,7 @@ interface ImageNode extends HasId, HasTitle {
  * in the original Asciidoc, e.g. lists have inner structure. It is, however, assumed that this node
  * is typically rendered as a whole. Because of this, it is not devided more granularly by default.
  */
-export interface BlockNode {
+export interface AtomicNode {
   type:
     | 'paragraph'
     | 'image'
@@ -106,4 +106,8 @@ export interface BlockNode {
   content: string
 }
 
-export type Node = Document | Section | BlockNode
+export type Node = Document | Section | AtomicNode
+
+export type Atomic<T extends StructuralNode> = Omit<T, 'children'> & {
+  content: string
+}

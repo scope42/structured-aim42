@@ -15,7 +15,7 @@ function processStructuralNode(node, path) {
   if (!fs.existsSync(path)) { fs.mkdirSync(path) }
 
   generateDescriptionFile(node, path)
-  generateContentFile(node, path)
+  generateAtomicContentFile(node, path)
 
   node.getSections().forEach(child => processStructuralNode(child, path + "/" + getSlug(child)))
 }
@@ -47,13 +47,13 @@ function generateDescriptionFile(node, path) {
   fs.writeFileSync(path + '/index.ts', sectionFile, { flag: 'w' })
 }
 
-function generateDescription(node) {
+function generateDescription(node, atomic = false) {
 
   const type = node.getNodeName();
 
   switch (type) {
     case "document":
-      return { type, ...generateStructuralNodeDescription(node) }
+      return { type, ...generateStructuralNodeDescription(node, atomic) }
     case "section":
       return {
         type,
@@ -62,7 +62,7 @@ function generateDescription(node) {
         sectionType: node.getSectionName(),
         index: node.getIndex(),
         caption: node.getCaption(),
-        ...generateStructuralNodeDescription(node)
+        ...generateStructuralNodeDescription(node, atomic)
       }
       // case "image":
       //   return {
@@ -87,20 +87,28 @@ function generateTitledNodeDescription(node) {
   }
 }
 
-function generateStructuralNodeDescription(node) {
-  return {
-    ...generateTitledNodeDescription(node),
-    children: node.getBlocks().map(b => generateDescription(b))
+function generateStructuralNodeDescription(node, atomic = false) {
+  const description = generateTitledNodeDescription(node)
+  if (atomic) {
+    description.content = node.getContent()
+  } else {
+    description.children = node.getBlocks().map(b => generateDescription(b))
   }
+  return description
 }
 
-function generateContentFile(node, path) {
+function generateAtomicContentFile(node, path) {
   const isDocument = node.getNodeName() === "document"
-  const variable = (isDocument ? "aim42" : camelCase(getSlug(node))) + "Content"
+  const type = isDocument ? "Document" : "Section"
+  const variable = (isDocument ? "aim42" : camelCase(getSlug(node))) + "Atomic"
   const content = `
-    export const ${variable}: string = ${JSON.stringify(node.getContent())}
+    ${GENERATED_COMMENT}
+
+    import { Atomic, ${type} } from 'types'
+
+    export const ${variable}: Atomic<${type}> = ${JSON.stringify(generateDescription(node, true))}
   `
-  fs.writeFileSync(path + "/content.ts", content, { flag: 'w' })
+  fs.writeFileSync(path + "/atomic.ts", content, { flag: 'w' })
 }
 
 main();
