@@ -3,14 +3,17 @@
   "version": "0.0.0",
   "description": "A structured version of the aim42 method reference",
   "main": "lib/index.js",
-  "files": ["lib/**"],
+  "files": [
+    "lib/**"
+  ],
   "scripts": {
     "clone": "git clone https://github.com/aim42/aim42.git",
-    "build": "npm-run-all clean generate format compile",
-    "clean": "rimraf src/**/[!types.ts]*",
+    "build": "npm-run-all clean generate format compile copy-resources",
+    "clean": "rimraf src/**/[!types.ts]* && rimraf lib/**",
     "generate": "node generate.js",
     "compile": "tsc",
-    "format": "prettier --write \"src/**/*\""
+    "format": "prettier --write \"src/**/*\"",
+    "copy-resources": "copyfiles -u 4 \"aim42/src/main/resources/@(images|css)/**\" src/_resources && copyfiles -u 1 src/_resources/** lib"
   },
   "repository": {
     "type": "git",
@@ -26,6 +29,7 @@
     "@xinra/prettier-config": "^2.0.0",
     "asciidoctor": "^2.2.6",
     "camelcase": "^6.3.0",
+    "copyfiles": "^2.4.1",
     "jsdom": "^19.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
