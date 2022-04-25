@@ -1,7 +1,7 @@
 {
   "name": "@scope42/structured-aim42",
   "version": "0.2.0",
-  "description": "A structured version of the aim42 method reference",
+  "description": "A structured version of the aim42 Method Reference",
   "main": "lib/index.js",
   "files": [
     "lib/**",
@@ -9,10 +9,11 @@
   ],
   "scripts": {
     "clone": "git clone https://github.com/aim42/aim42.git",
-    "build": "npm-run-all clean generate format compile copy-resources",
+    "pull": "git -C ./aim42 pull",
+    "build": "tsc",
+    "update": "npm-run-all pull clean generate format copy-resources build",
     "clean": "rimraf \"src/**/[!types.ts]*\" && rimraf lib && rimraf resources",
     "generate": "node generate.js",
-    "compile": "tsc",
     "format": "prettier --write \"src/**/*\"",
     "copy-resources": "copyfiles -u 4 \"aim42/src/main/resources/@(images|css)/**\" resources"
   },
