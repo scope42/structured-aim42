@@ -1,6 +1,6 @@
 {
   "name": "@scope42/structured-aim42",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A structured version of the aim42 Method Reference",
   "main": "lib/index.js",
   "files": [
