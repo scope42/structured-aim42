@@ -7,7 +7,5 @@
     "@semantic-release/changelog",
     "@semantic-release/git"
   ],
-  "release": {
-    "branches": ["main"]
-  }
+  "branches": ["main"]
 }
