@@ -1,4 +1,7 @@
 # structured-aim42
+[![Build](https://github.com/scope42/structured-aim42/actions/workflows/build.yml/badge.svg)](https://github.com/scope42/structured-aim42/actions/workflows/build.yml)
+[![Up to date?](https://github.com/scope42/structured-aim42/actions/workflows/check-for-updates.yml/badge.svg)](https://github.com/scope42/structured-aim42/actions/workflows/check-for-updates.yml)
+[![npm](https://img.shields.io/npm/v/@scope42/structured-aim42)](https://www.npmjs.com/package/@scope42/structured-aim42)
 
 This is a structured version of the [aim42 Method Reference](https://aim42.github.io/). It takes the [original AsciiDoc sources](https://github.com/aim42/aim42) and extracts the structural information from them. This yields a tree of sections enriched with meta-data. The leaf nodes are available as rendered HTML.
 
