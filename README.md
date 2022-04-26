@@ -1,5 +1,9 @@
 # structured-aim42
 
+This is a structured version of the [aim42 Method Reference](https://aim42.github.io/). It takes the [original AsciiDoc sources](https://github.com/aim42/aim42) and extracts the structural information from them. This yields a tree of sections enriched with meta-data. The leaf nodes are available as rendered HTML.
+
+This library makes it convenient to re-distribute aim42 content (**see [LICENSE](https://github.com/scope42/structured-aim42/blob/main/LICENSE.md)**) programatically. It is kept is sync with the original repository.
+
 ## Usage
 
 Install using your preferred package manager. Example:
