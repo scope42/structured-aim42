@@ -23,4 +23,4 @@ jobs:
     - run: npm ci
     - run: npm run clone
     - run: npm run update
-    - run: sh ./verify-no-changes.sh
+    - run: bash ./verify-no-changes.sh
