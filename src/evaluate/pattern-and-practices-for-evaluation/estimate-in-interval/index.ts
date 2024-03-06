@@ -54,7 +54,7 @@ export const estimateInInterval: Section = {
         {
           type: 'admonition',
           content:
-            '<div class="admonitionblock caution">\n<table>\n<tr>\n<td class="icon">\n<div class="title">Caution</div>\n</td>\n<td class="content">\nBe aware of the anchoring effect <a href="http://en.wikipedia.org/wiki/Anchoring" class="bare">http://en.wikipedia.org/wiki/Anchoring</a>\n</td>\n</tr>\n</table>\n</div>'
+            '<div class="admonitionblock caution">\n<table>\n<tr>\n<td class="icon">\n<div class="title">Caution</div>\n</td>\n<td class="content">\nBe aware of the anchoring effect <a href="http://en.wikipedia.org/wiki/Anchoring_effect" class="bare">http://en.wikipedia.org/wiki/Anchoring_effect</a>\n</td>\n</tr>\n</table>\n</div>'
         },
         {
           type: 'paragraph',
